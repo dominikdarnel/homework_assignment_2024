@@ -1,7 +1,6 @@
-class CompanyFilter
+class CompanyFilterQuery
   class << self
-    def call(scope, params)
-      scope = with_necessary_joins(scope)
+    def call(scope = Company.joins(:deals), params)
       scope = by_company_name(scope, params[:company_name])
       scope = by_industry(scope, params[:industry])
       scope = by_minimum_employee_count(scope, params[:minimum_employee_count])
@@ -10,10 +9,6 @@ class CompanyFilter
     end
   
     private
-
-    def with_necessary_joins(scope)
-      scope.joins(:deals).preload(:deals)
-    end
   
     def by_company_name(scope, company_name)
       return scope if company_name.blank?

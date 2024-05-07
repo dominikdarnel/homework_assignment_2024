@@ -1,7 +1,15 @@
 class Api::V1::CompaniesController < ApplicationController
   def index
-    scope = Company.all.order(created_at: :desc)
-    companies = CompanyFilter.call(scope, params).page(params[:page])
-    render json: companies.as_json(include: :deals)
+    companies = CompanyFilterQuery.call(companies_scope, params).page(params[:page])
+    render json: companies.as_json
+  end
+
+  private
+
+  def companies_scope
+    Company.joins(:deals)
+           .select('companies.name, companies.industry, companies.employee_count', 'SUM(deals.amount) AS total_deal_amount')
+           .group('companies.id')
+           .order(created_at: :desc)
   end
 end
