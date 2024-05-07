@@ -14,7 +14,7 @@ class TestDataGenerator
 
     def companies_sql
       <<-SQL.squish
-        INSERT INTO companies (id, name, employee_count, created_at, updated_at)
+        INSERT INTO companies (id, name, employee_count, industry, created_at, updated_at)
         WITH RECURSIVE counter(n) AS(
             SELECT 1 AS n
             UNION ALL
@@ -24,6 +24,7 @@ class TestDataGenerator
           counter.n,
           CONCAT('Company - ', counter.n),
           FLOOR(10 + RAND() * (500 - 10)), /* random number between 10 and 500 */
+          ELT(1 + FLOOR(RAND() * 5), 'Healthcare', 'Aviation & Aerospace', 'Photography', 'Technology', 'Banking'), /* list of random industries */
           CURTIME(),
           CURTIME()
         FROM counter;
