@@ -8,7 +8,7 @@ class Api::V1::CompaniesController < ApplicationController
 
   def companies_scope
     Company.joins(:deals)
-           .select('companies.name, companies.industry, companies.employee_count', 'SUM(deals.amount) AS total_deal_amount')
+           .select('companies.id, companies.name, companies.industry, companies.employee_count', 'SUM(deals.amount) AS total_deal_amount')
            .group('companies.id')
            .order(created_at: :desc)
   end
