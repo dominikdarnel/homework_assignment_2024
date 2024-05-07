@@ -70,6 +70,7 @@ GEM
     bootsnap (1.17.1)
       msgpack (~> 1.2)
     builder (3.2.4)
+    byebug (11.1.3)
     concurrent-ruby (1.2.3)
     crass (1.0.6)
     cssbundling-rails (1.4.0)
@@ -192,9 +193,11 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-darwin-22
 
 DEPENDENCIES
   bootsnap
+  byebug
   cssbundling-rails
   debug
   faker
