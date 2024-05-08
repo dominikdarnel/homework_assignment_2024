@@ -74,6 +74,32 @@ RSpec.describe Api::V1::CompaniesController do
       end
     end
 
+    context 'when a company does not have any deals' do
+      it 'total deals returns 0 instead of nil' do
+        company = create(
+          :company,
+          name: 'name',
+          industry: 'industry',
+          employee_count: 1
+        )
+
+        get :index
+
+        parsed_response = JSON.parse(response.body)
+        expected_response_body = [
+          {
+            'id' => company.id,
+            'name' => 'name',
+            'industry' => 'industry',
+            'employee_count' => 1,
+            'total_deal_amount' => 0
+          }
+        ]
+
+        expect(parsed_response).to eq(expected_response_body)
+      end
+    end
+
     context 'when an error happens' do
       before do
         allow(CompanyFilterQuery).to receive(:call).and_raise(StandardError)
