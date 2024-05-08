@@ -56,9 +56,14 @@ RSpec.describe CompanyFilterQuery do
           maximum_deal_amount: 5
         }
 
-        company_one = create(:company, deals: [create(:deal, amount: 1)])
-        company_two = create(:company, deals: [create(:deal, amount: 5)])
-        company_three = create(:company, deals: [create(:deal, amount: 10)])
+        company_one = create(:company)
+        create(:deal, amount: 1, company: company_one)
+
+        company_two = create(:company)
+        create(:deal, amount: 5, company: company_two)
+
+        company_three = create(:company)
+        create(:deal, amount: 10, company: company_three)
         
         result = CompanyFilterQuery.call(params)
 
@@ -79,25 +84,25 @@ RSpec.describe CompanyFilterQuery do
           :company,
           name: 'Apple Inc.',
           industry: 'Arts',
-          employee_count: 10,
-          deals: [create(:deal, amount: 1)]
+          employee_count: 10
         )
+        create(:deal, amount: 1, company: company_one)
 
         company_two = create(
           :company,
           name: 'App Devs Ltd.',
           industry: 'Artificial Intelligence',
-          employee_count: 5,
-          deals: [create(:deal, amount: 5)]
+          employee_count: 5
         )
+        create(:deal, amount: 1, company: company_two)
 
         company_three = create(
           :company,
           name: 'Google Inc.',
           industry: 'Engineering',
-          employee_count: 1,
-          deals: [create(:deal, amount: 10)]
+          employee_count: 1
         )
+        create(:deal, amount: 10, company: company_three)
 
         result = CompanyFilterQuery.call(params)
 

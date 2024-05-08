@@ -3,6 +3,5 @@ FactoryBot.define do
     name { Faker::Company.name }
     status { 'pending' }
     amount { rand(10..1000) }
-    company
   end
 end
