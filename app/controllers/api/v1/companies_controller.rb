@@ -1,6 +1,6 @@
 class Api::V1::CompaniesController < ApplicationController
   def index
-    companies = CompanyFilterQuery.call(companies_scope, params).page(params[:page])
+    companies = CompanyFilterQuery.call(params, companies_scope).page(params[:page])
     render json: companies.as_json
   end
 

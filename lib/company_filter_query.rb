@@ -1,6 +1,6 @@
 class CompanyFilterQuery
   class << self
-    def call(scope = Company.joins(:deals), params)
+    def call(params, scope = Company.left_joins(:deals))
       scope = by_company_name(scope, params[:company_name])
       scope = by_industry(scope, params[:industry])
       scope = by_minimum_employee_count(scope, params[:minimum_employee_count])
