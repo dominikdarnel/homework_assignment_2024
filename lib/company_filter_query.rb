@@ -4,7 +4,7 @@ class CompanyFilterQuery
       scope = by_company_name(scope, params[:company_name])
       scope = by_industry(scope, params[:industry])
       scope = by_minimum_employee_count(scope, params[:minimum_employee_count])
-      scope = by_maximum_deal_amount(scope, params[:maximum_deal_amount])
+      scope = by_minimum_deal_amount(scope, params[:minimum_deal_amount])
       scope
     end
   
@@ -28,10 +28,10 @@ class CompanyFilterQuery
       scope.where('companies.employee_count >= ?', minimum_employee_count)
     end
   
-    def by_maximum_deal_amount(scope, maximum_deal_amount)
-      return scope if maximum_deal_amount.blank?
+    def by_minimum_deal_amount(scope, by_minimum_deal_amount)
+      return scope if by_minimum_deal_amount.blank?
   
-      scope.where('deals.amount <= ?', maximum_deal_amount)
+      scope.where('deals.amount >= ?', by_minimum_deal_amount)
     end
   end
 end

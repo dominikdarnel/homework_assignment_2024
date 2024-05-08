@@ -50,20 +50,20 @@ RSpec.describe CompanyFilterQuery do
       end
     end
 
-    context 'when params has maximum_deal_amount filter' do
-      it 'returns filtered companies with its deal amounts less or equal than param' do
+    context 'when params has minimum_deal_amount filter' do
+      it 'returns filtered companies with its deal amounts greater or equal than param' do
         params = {
-          maximum_deal_amount: 5
+          minimum_deal_amount: 5
         }
 
         company_one = create(:company)
-        create(:deal, amount: 1, company: company_one)
+        create(:deal, amount: 10, company: company_one)
 
         company_two = create(:company)
         create(:deal, amount: 5, company: company_two)
 
         company_three = create(:company)
-        create(:deal, amount: 10, company: company_three)
+        create(:deal, amount: 1, company: company_three)
         
         result = CompanyFilterQuery.call(params)
 
@@ -77,7 +77,7 @@ RSpec.describe CompanyFilterQuery do
           company_name: 'Ap',
           industry: 'Art',
           minimum_employee_count: 5,
-          maximum_deal_amount: 5
+          minimum_deal_amount: 5
         }
 
         company_one = create(
@@ -86,7 +86,7 @@ RSpec.describe CompanyFilterQuery do
           industry: 'Arts',
           employee_count: 10
         )
-        create(:deal, amount: 1, company: company_one)
+        create(:deal, amount: 10, company: company_one)
 
         company_two = create(
           :company,
@@ -94,7 +94,7 @@ RSpec.describe CompanyFilterQuery do
           industry: 'Artificial Intelligence',
           employee_count: 5
         )
-        create(:deal, amount: 1, company: company_two)
+        create(:deal, amount: 5, company: company_two)
 
         company_three = create(
           :company,
@@ -102,7 +102,7 @@ RSpec.describe CompanyFilterQuery do
           industry: 'Engineering',
           employee_count: 1
         )
-        create(:deal, amount: 10, company: company_three)
+        create(:deal, amount: 1, company: company_three)
 
         result = CompanyFilterQuery.call(params)
 
