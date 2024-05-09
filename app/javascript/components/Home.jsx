@@ -4,13 +4,20 @@ import {useQuery} from 'react-query'
 const fetchFilteredCompanies = async ({queryKey}) => {
   const [_, queryString, page] = queryKey
   const url = `/api/v1/companies?${queryString}&page=${page}`;
-  const res = await fetch(url)      
-  return res.json();
+  const response = await fetch(url)      
+
+  if (!response.ok) {
+    throw new Error('Server error. Try again later.')
+  }
+
+  return response.json();
 }
 
 export default () => {
   const [queryString, setQueryString] = useState('')
   const [page, setPage] = useState(1)
+
+  const keepFetchedDataForMs = 2000 * 60 // data is cached for 2 minutes
 
   const {
     data: companies,
@@ -18,7 +25,7 @@ export default () => {
     isFetching,
     isLoading,
     isError
-  } = useQuery(['companies', queryString, page], fetchFilteredCompanies, {keepPreviousData: true})
+  } = useQuery(['companies', queryString, page], fetchFilteredCompanies, {keepPreviousData: true, staleTime: keepFetchedDataForMs})
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -26,7 +33,15 @@ export default () => {
     const formData = new FormData(event.currentTarget)
     const fieldValues = Object.fromEntries(formData.entries())
 
+    const formIsEmpty = Object.values(fieldValues).every((value) => !value)
+
+    if (formIsEmpty) {
+      return;
+    }
+
     let queryString = new URLSearchParams(fieldValues).toString()
+
+    setPage(1)
     setQueryString(queryString)
   }
 
@@ -70,7 +85,7 @@ export default () => {
               <input type="text" className="form-control" name='minimum_deal_total' id="min-amount" />
             </div>
 
-            <button type="reset" className="btn btn-primary">
+            <button type="reset" className="btn btn-secondary">
               Reset
             </button>
             <button type="submit" className="btn btn-primary">
@@ -92,7 +107,7 @@ export default () => {
             {isLoading ? (
               <tr><td>Loading...</td></tr>
             ) : isError ? (
-              <tr><td>Error: {error.message}</td></tr>
+              <tr><td>{error.message}</td></tr>
             ) : (companies?.map((company) => (
                 <tr key={company.id}>
                   <td>{company.name}</td>
