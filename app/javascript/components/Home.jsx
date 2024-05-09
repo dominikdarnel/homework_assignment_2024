@@ -2,15 +2,23 @@ import React, { useState } from "react";
 import {useQuery} from 'react-query'
 
 const fetchFilteredCompanies = async ({queryKey}) => {
-  const [_, queryString] = queryKey
-  const url = `/api/v1/companies?${queryString}`;
+  const [_, queryString, page] = queryKey
+  const url = `/api/v1/companies?${queryString}&page=${page}`;
   const res = await fetch(url)      
   return res.json();
 }
 
 export default () => {
   const [queryString, setQueryString] = useState('')
-  const {data: companies, error} = useQuery(['companies', queryString], fetchFilteredCompanies)
+  const [page, setPage] = useState(1)
+
+  const {
+    data: companies,
+    error,
+    isFetching,
+    isLoading,
+    isError
+  } = useQuery(['companies', queryString, page], fetchFilteredCompanies, {keepPreviousData: true})
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -22,8 +30,17 @@ export default () => {
     setQueryString(queryString)
   }
 
-  const handleReset = (event) => {
+  const handleReset = (_event) => {
+    setPage(1)
     setQueryString('')
+  }
+
+  const handleNext = () => {
+    setPage(old => old + 1)
+  }
+
+  const handlePrevious = () => {
+    setPage(old => Math.max(old - 1, 0))
   }
 
   return (
@@ -61,7 +78,7 @@ export default () => {
             </button>
           </form>
 
-            <table className="table">
+          <table className="table">
             <thead>
               <tr>
                 <th scope="col">Name</th>
@@ -71,16 +88,26 @@ export default () => {
               </tr>
             </thead>
             <tbody>
-              {companies?.map((company) => (
+              
+            {isLoading ? (
+              <tr><td>Loading...</td></tr>
+            ) : isError ? (
+              <tr><td>Error: {error.message}</td></tr>
+            ) : (companies?.map((company) => (
                 <tr key={company.id}>
                   <td>{company.name}</td>
                   <td>{company.industry}</td>
                   <td>{company.employee_count}</td>
                   <td>{company.total_deal_amount}</td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
+          
+          <span>Current page: {page}</span>
+          <button className="btn btn-secondary" onClick={handlePrevious} disabled={page === 1}>Previous</button>
+          <button className="btn btn-secondary" onClick={handleNext}>Next</button>
+          {isFetching ? <span> Loading...</span> : null}{' '}
         </div>
       </div>
     </div>
