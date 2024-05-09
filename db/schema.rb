@@ -11,26 +11,22 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2024_05_08_052908) do
-  create_table "companies", charset: "utf8mb4", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "companies", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "name"
     t.integer "employee_count"
     t.string "industry"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["created_at"], name: "index_companies_on_created_at"
-    t.index ["employee_count"], name: "index_companies_on_employee_count"
-    t.index ["industry"], name: "index_companies_on_industry"
-    t.index ["name"], name: "index_companies_on_name"
   end
 
-  create_table "deals", charset: "utf8mb4", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "deals", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "name"
     t.integer "amount"
     t.string "status"
     t.bigint "company_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["amount"], name: "index_deals_on_amount"
+    t.index ["company_id", "amount"], name: "index_deals_on_company_id_and_amount"
     t.index ["company_id"], name: "index_deals_on_company_id"
   end
 
