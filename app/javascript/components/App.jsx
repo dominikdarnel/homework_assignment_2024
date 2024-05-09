@@ -1,4 +1,11 @@
 import React from "react";
 import Routes from "../routes";
+import {QueryClient, QueryClientProvider} from 'react-query'
 
-export default props => <>{Routes}</>;
+const queryClient = new QueryClient()
+
+export default _props => (
+  <QueryClientProvider client={queryClient}>
+    <>{Routes}</>
+  </QueryClientProvider>
+);
