@@ -177,6 +177,7 @@ FROM
 WHERE (companies.name LIKE 'Company - 2%')
 	AND(companies.industry LIKE 'Photo%')
 	AND(companies.employee_count >= '300')
+	AND(deals.amount >= '3000')
 GROUP BY
 	companies.id
 ORDER BY
