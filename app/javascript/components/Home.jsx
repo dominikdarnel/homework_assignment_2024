@@ -82,7 +82,7 @@ export default () => {
 
             <label htmlFor="min-amount">Minimum Deal Amount</label>
             <div className="input-group mb-3">
-              <input type="text" className="form-control" name='minimum_deal_total' id="min-amount" />
+              <input type="text" className="form-control" name='minimum_deal_amount' id="min-amount" />
             </div>
 
             <button type="reset" className="btn btn-secondary">
