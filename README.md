@@ -158,7 +158,8 @@ You can reach out to Alan at [first name]@pipelinecrm.com for any questions abou
 
 ### DB Scale
 
-200k companies, 1M deals, generated with the `TestDataGenerator` class, during seeding
+- 200k companies, 1M deals, generated with the `TestDataGenerator` class, during seeding.
+- `TestDataGenerator` uses raw SQL, rathen than `ActiveRecord`, so data generation taker around 30 seconds.
 
 ### DB Performance, indexing, possible improvements
 
